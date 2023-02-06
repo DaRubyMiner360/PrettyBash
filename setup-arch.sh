@@ -14,7 +14,7 @@ checkEnv(){
     fi
 
     ## Check for requirements.
-    REQUIREMENTS='curl yay sudo'
+    REQUIREMENTS='curl paru sudo'
     if ! which ${REQUIREMENTS}>/dev/null;then
         echo -e "${RED}To run me,https://github.com/fearlessgeekmedia/mybash you need: ${REQUIREMENTS}${RC}"
         exit 1
@@ -31,14 +31,14 @@ installDepend(){
     ## Check for dependencies.
     # For some reason, if I put autojump in the original DEPENDENCIES variable, 
     # it skips the installation and just does bash and bash completion. So I
-    # put autojump in a separate variable and separate yay command.
+    # put autojump in a separate variable and separate paru command.
     DEPENDENCIES1='bash bash-completion'
     DEPENDENCIES2='autojump'
     DEPENDENCIES2='autojump-git'
     echo -e "${YELLOW}Installing dependencies...${RC}"
-    yay -S ${DEPENDENCIES1}
-    yay -S ${DEPENDENCIES2}
-    yay -S ${DEPENDENCIES3}
+    paru -S ${DEPENDENCIES1}
+    paru -S ${DEPENDENCIES2}
+    paru -S ${DEPENDENCIES3}
     sudo mkdir /usr/local/bin/autojump
     sudo ln -s /etc/profile.d/autojump.sh /usr/share/autojump/autojump.sh
 }
@@ -52,18 +52,21 @@ installStarship(){
 
 linkConfig(){
     ## Check if a bashrc file is already there.
-    OLD_BASHRC="${HOME}/.bashrc"
-    if [[ -e ${OLD_BASHRC} ]];then
-        echo -e "${YELLOW}Moving old bash config file to ${HOME}/.bashrc.bak${RC}"
-        if ! mv ${OLD_BASHRC} ${HOME}/.bashrc.bak;then
-            echo -e "${RED}Can't move the old bash config file!${RC}"
-            exit 1
-        fi
-    fi
+    #OLD_BASHRC="${HOME}/.bashrc"
+    #if [[ -e ${OLD_BASHRC} ]];then
+    #    echo -e "${YELLOW}Moving old bash config file to ${HOME}/.bashrc.bak${RC}"
+    #    if ! mv ${OLD_BASHRC} ${HOME}/.bashrc.bak;then
+    #        echo -e "${RED}Can't move the old bash config file!${RC}"
+    #        exit 1
+    #    fi
+    #fi
 
     echo -e "${YELLOW}Linking new bash config file...${RC}"
     ## Make symbolic link.
-    ln -svf ${GITPATH}/.bashrc ${HOME}/.bashrc
+    #ln -svf ${GITPATH}/.bashrc ${HOME}/.bashrc
+    if ! grep -q "source ${GITPATH}/.bashrc" ${HOME}/.bashrc; then
+      echo -e "\n\nsource ${GITPATH}/.bashrc" >> ${HOME}/.bashrc
+    fi
     ln -svf ${GITPATH}/starship.toml ${HOME}/.config/starship.toml
 }
 

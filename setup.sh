@@ -61,14 +61,14 @@ installDepend() {
     DEPENDENCIES='autojump bash bash-completion tar neovim'
     echo -e "${YELLOW}Installing dependencies...${RC}"
     if [[ $PACKAGER == "pacman" ]]; then
-        if ! command_exists yay; then
-            echo "Installing yay..."
+        if ! command_exists paru; then
+            echo "Installing paru..."
             sudo ${PACKAGER} --noconfirm -S base-devel
-            $(cd /opt && sudo git clone https://aur.archlinux.org/yay-git.git && sudo chown -R ${USER}:${USER} ./yay-git && cd yay-git && makepkg --noconfirm -si)
+            $(cd /opt && sudo git clone https://aur.archlinux.org/paru.git && sudo chown -R ${USER}:${USER} ./paru && cd paru && makepkg --noconfirm -si)
         else
-            echo "Command yay already installed"
+            echo "Command paru already installed"
         fi
-    	yay --noconfirm -S ${DEPENDENCIES}
+    	paru --noconfirm -S ${DEPENDENCIES}
     else 
     	sudo ${PACKAGER} install -yq ${DEPENDENCIES}
     fi
@@ -88,18 +88,21 @@ installStarship(){
 
 linkConfig() {
     ## Check if a bashrc file is already there.
-    OLD_BASHRC="${HOME}/.bashrc"
-    if [[ -e ${OLD_BASHRC} ]]; then
-        echo -e "${YELLOW}Moving old bash config file to ${HOME}/.bashrc.bak${RC}"
-        if ! mv ${OLD_BASHRC} ${HOME}/.bashrc.bak; then
-            echo -e "${RED}Can't move the old bash config file!${RC}"
-            exit 1
-        fi
-    fi
+    #OLD_BASHRC="${HOME}/.bashrc"
+    #if [[ -e ${OLD_BASHRC} ]]; then
+    #    echo -e "${YELLOW}Moving old bash config file to ${HOME}/.bashrc.bak${RC}"
+    #    if ! mv ${OLD_BASHRC} ${HOME}/.bashrc.bak; then
+    #        echo -e "${RED}Can't move the old bash config file!${RC}"
+    #        exit 1
+    #    fi
+    #fi
 
     echo -e "${YELLOW}Linking new bash config file...${RC}"
     ## Make symbolic link.
-    ln -svf ${GITPATH}/.bashrc ${HOME}/.bashrc
+    #ln -svf ${GITPATH}/.bashrc ${HOME}/.bashrc
+    if ! grep -q "source ${GITPATH}/.bashrc" ${HOME}/.bashrc; then
+      echo -e "\n\nsource ${GITPATH}/.bashrc" >> ${HOME}/.bashrc
+    fi
     ln -svf ${GITPATH}/starship.toml ${HOME}/.config/starship.toml
 }
 
