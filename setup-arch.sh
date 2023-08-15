@@ -36,9 +36,9 @@ installDepend(){
     DEPENDENCIES2='autojump'
     DEPENDENCIES2='autojump-git'
     echo -e "${YELLOW}Installing dependencies...${RC}"
-    paru -S ${DEPENDENCIES1}
-    paru -S ${DEPENDENCIES2}
-    paru -S ${DEPENDENCIES3}
+    paru -S --needed ${DEPENDENCIES1}
+    paru -S --needed ${DEPENDENCIES2}
+    paru -S --needed ${DEPENDENCIES3}
     sudo mkdir /usr/local/bin/autojump
     sudo ln -s /etc/profile.d/autojump.sh /usr/share/autojump/autojump.sh
 }

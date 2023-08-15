@@ -63,12 +63,12 @@ installDepend() {
     if [[ $PACKAGER == "pacman" ]]; then
         if ! command_exists paru; then
             echo "Installing paru..."
-            sudo ${PACKAGER} --noconfirm -S base-devel
+            sudo ${PACKAGER} --noconfirm -S --needed base-devel
             $(cd /opt && sudo git clone https://aur.archlinux.org/paru.git && sudo chown -R ${USER}:${USER} ./paru && cd paru && makepkg --noconfirm -si)
         else
             echo "Command paru already installed"
         fi
-    	paru --noconfirm -S ${DEPENDENCIES}
+    	paru --noconfirm -S --needed ${DEPENDENCIES}
     else 
     	sudo ${PACKAGER} install -yq ${DEPENDENCIES}
     fi
